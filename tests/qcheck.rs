@@ -56,11 +56,6 @@ impl Arbitrary for A3Matrix<i32> {
     }
 }
 
-fn neg(m: Matrix<i32>) -> Matrix<i32> {
-    let zero = Matrix::zero(m.rows(), m.cols());
-    zero - m
-}
-
 quickcheck! {
     fn qcheck_get(t: AMatrix<i32>) -> bool {
         let a = t.0;
@@ -286,7 +281,7 @@ quickcheck! {
         let b = &t.1;
         let zero = &Matrix::zero(a.rows(), a.cols());
 
-        (a - b == neg(b - a)) && (&(a - a) == zero) && (&(a - zero) == a)
+        (a - b == -(b - a)) && (&(a - a) == zero) && (&(a - zero) == a)
     }
 
     fn qcheck_mul(t: AMatrix<i32>) -> bool {

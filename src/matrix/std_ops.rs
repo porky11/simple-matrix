@@ -2,6 +2,7 @@ use super::Matrix;
 use std::ops::Add;
 use std::ops::AddAssign;
 use std::ops::Mul;
+use std::ops::Neg;
 use std::ops::Sub;
 use std::ops::SubAssign;
 
@@ -82,6 +83,20 @@ impl_op!(Add, add, +);
 impl_op!(Sub, sub, -);
 impl_op_assign!(AddAssign, add_assign, +=);
 impl_op_assign!(SubAssign, sub_assign, -=);
+
+// Neg implementation
+
+impl<T: Neg<Output = T>> Neg for Matrix<T> {
+    type Output = Matrix<T>;
+
+    fn neg(self) -> Self::Output {
+        Matrix {
+            rows: self.rows,
+            cols: self.cols,
+            data: self.into_iter().map(|a| -a).collect(),
+        }
+    }
+}
 
 // Mul implementation
 

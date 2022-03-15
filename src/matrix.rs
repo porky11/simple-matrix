@@ -16,6 +16,24 @@ pub struct Matrix<T> {
 }
 
 impl<T> Matrix<T> {
+    /// Constructs a new Matrix<T> from a 2D array.
+    ///
+    /// # Panics
+    /// Panics if either `rows` or `cols` are equal to `0`
+    ///
+    /// # Examples
+    /// ```
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<i32> = Matrix::new([[1, 2], [3, 4], [5, 6]]);
+    /// ```
+    pub fn new<const R: usize, const C: usize>(values: [[T; R]; C]) -> Matrix<T>
+    where
+        T: Zero,
+    {
+        Matrix::from_iter(R, C, values.into_iter().flatten())
+    }
+
     /// Constructs a new Matrix<T> where cells are set to zero.
     /// Use `Matrix::from_iter` if you want to set the matrix from an iterator.
     ///

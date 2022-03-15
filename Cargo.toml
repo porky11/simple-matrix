@@ -1,5 +1,5 @@
 [package]
-edition = '2018'
+edition = '2021'
 name = "simple-matrix"
 version = "0.1.2"
 authors = ["Nicolas Mémeint <nicolas.memeint@gmail.com>"]

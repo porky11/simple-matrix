@@ -208,8 +208,8 @@ impl<T> Matrix<T> {
             cols: self.rows,
             data: {
                 let mut data = Vec::with_capacity(self.cols * self.rows);
-                for row in 0..self.rows {
-                    for val in self.get_row(row).unwrap() {
+                for col in 0..self.cols {
+                    for val in self.get_col(col).unwrap() {
                         data.push(val.clone());
                     }
                 }

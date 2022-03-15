@@ -12,6 +12,9 @@ description = "A simple generic matrix library"
 categories = ["data-structures"]
 keywords = ["simple", "matrix", "matrices"]
 
+[dependencies]
+num-traits = "0.2"
+
 [features]
 impl_from = []
 

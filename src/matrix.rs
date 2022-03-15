@@ -3,6 +3,8 @@ mod from;
 mod iter;
 mod std_ops;
 
+use num_traits::Zero;
+
 use std::ops::{Deref, Index, IndexMut};
 
 /// A 2-Dimensional, non-resizable container.
@@ -14,7 +16,7 @@ pub struct Matrix<T> {
 }
 
 impl<T> Matrix<T> {
-    /// Constructs a new, non-empty Matrix<T> where cells are set to `T::default`.  
+    /// Constructs a new, non-empty Matrix<T> where cells are set to zero.  
     /// Use `Matrix::from_iter` if you want to set the matrix from an iterator.
     ///
     /// # Panics
@@ -28,9 +30,9 @@ impl<T> Matrix<T> {
     /// ```
     pub fn new(rows: usize, cols: usize) -> Matrix<T>
     where
-        T: Default,
+        T: Zero,
     {
-        Matrix::from_iter(rows, cols, (0..).map(|_| T::default()))
+        Matrix::from_iter(rows, cols, (0..).map(|_| T::zero()))
     }
 
     /// Constructs a new, non-empty Matrix<T> where cells are set from an iterator.  

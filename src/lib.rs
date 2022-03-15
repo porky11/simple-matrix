@@ -17,21 +17,8 @@ simple-matrix = "0.1"
 ```
 
 Then, you can use it in your project:
-## Rust 2015
-```
-// Specify the extern crate in your lib.rs or main.rs
-extern crate simple_matrix;
 
-// You can now use it
-use simple_matrix::Matrix;
-
-let mat: Matrix<i32> = Matrix::new();
 ```
-
-## Rust 2018
-```
-// No need to specify an extern crate
-// You can use it directly
 use simple_matrix::Matrix;
 
 let mat: Matrix<i32> = Matrix::new();

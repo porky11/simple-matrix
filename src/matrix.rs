@@ -64,10 +64,10 @@ impl<T> Matrix<T> {
     ///
     /// let mat: Matrix<usize> = Matrix::identity(3);
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), &1);
-    /// assert_eq!(mat.get(0, 1).unwrap(), &0);
-    /// assert_eq!(mat.get(2, 1).unwrap(), &0);
-    /// assert_eq!(mat.get(2, 2).unwrap(), &1);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 1);
+    /// assert_eq!(mat.get(0, 1).unwrap(), 0);
+    /// assert_eq!(mat.get(2, 1).unwrap(), 0);
+    /// assert_eq!(mat.get(2, 2).unwrap(), 1);
     /// ```
     pub fn identity(size: usize) -> Matrix<T>
     where
@@ -95,9 +95,9 @@ impl<T> Matrix<T> {
     ///
     /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
-    /// assert_eq!(mat.get(0, 1).unwrap(), &1);
-    /// assert_eq!(mat.get(1, 0).unwrap(), &6);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
+    /// assert_eq!(mat.get(0, 1).unwrap(), 1);
+    /// assert_eq!(mat.get(1, 0).unwrap(), 6);
     /// ```
     pub fn from_iter(rows: usize, cols: usize, data: impl IntoIterator<Item = T>) -> Matrix<T> {
         assert!(rows > 0 && cols > 0);
@@ -141,6 +141,31 @@ impl<T> Matrix<T> {
         self.cols
     }
 
+    /// Try to get the value at given row & column.  
+    /// Returns `None` if `row` or `col` is outside of the matrix.
+    ///
+    /// # Examples
+    /// ```
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
+    ///
+    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
+    /// assert_eq!(mat.get(2, 5).unwrap(), 17);
+    ///
+    /// assert!(mat.get(10, 2).is_none());
+    /// ```
+    pub fn get(&self, row: usize, col: usize) -> Option<T>
+    where
+        T: Clone,
+    {
+        if row < self.rows && col < self.cols {
+            Some(self.data[col + row * self.cols].clone())
+        } else {
+            None
+        }
+    }
+
     /// Try to get a reference to the value at given row & column.  
     /// Returns `None` if `row` or `col` is outside of the matrix.
     ///
@@ -150,12 +175,12 @@ impl<T> Matrix<T> {
     ///
     /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
-    /// assert_eq!(mat.get(2, 5).unwrap(), &17);
+    /// assert_eq!(mat.get_ref(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get_ref(2, 5).unwrap(), &17);
     ///
     /// assert!(mat.get(10, 2).is_none());
     /// ```
-    pub fn get(&self, row: usize, col: usize) -> Option<&T> {
+    pub fn get_ref(&self, row: usize, col: usize) -> Option<&T> {
         if row < self.rows && col < self.cols {
             Some(&self.data[col + row * self.cols])
         } else {
@@ -171,12 +196,12 @@ impl<T> Matrix<T> {
     /// use simple_matrix::Matrix;
     ///
     /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
-    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
     ///
     /// let cell = mat.get_mut(0, 0).unwrap();
     /// *cell = 5;
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), &5);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 5);
     /// ```
     pub fn get_mut(&mut self, row: usize, col: usize) -> Option<&mut T> {
         if row < self.rows && col < self.cols {
@@ -195,10 +220,10 @@ impl<T> Matrix<T> {
     /// use simple_matrix::Matrix;
     ///
     /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
-    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
     ///
     /// mat.set(0, 0, 5);
-    /// assert_eq!(mat.get(0, 0).unwrap(), &5);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 5);
     /// ```
     pub fn set(&mut self, row: usize, col: usize, value: T) -> bool {
         if let Some(cell) = self.get_mut(row, col) {
@@ -224,7 +249,7 @@ impl<T> Matrix<T> {
     /// ```
     pub fn get_row(&self, row: usize) -> Option<impl Iterator<Item = &T>> {
         if row < self.rows {
-            Some((0..self.cols).map(move |col| self.get(row, col).unwrap()))
+            Some((0..self.cols).map(move |col| self.get_ref(row, col).unwrap()))
         } else {
             None
         }
@@ -245,7 +270,7 @@ impl<T> Matrix<T> {
     /// ```
     pub fn get_col(&self, col: usize) -> Option<impl Iterator<Item = &T>> {
         if col < self.cols {
-            Some((0..self.rows).map(move |row| self.get(row, col).unwrap()))
+            Some((0..self.rows).map(move |row| self.get_ref(row, col).unwrap()))
         } else {
             None
         }
@@ -316,9 +341,9 @@ impl<T> Matrix<T> {
     /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     /// mat.apply_mut(|n| *n *= 2);
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
-    /// assert_eq!(mat.get(0, 1).unwrap(), &2);
-    /// assert_eq!(mat.get(0, 2).unwrap(), &4);
+    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
+    /// assert_eq!(mat.get(0, 1).unwrap(), 2);
+    /// assert_eq!(mat.get(0, 2).unwrap(), 4);
     /// ```
     pub fn apply_mut<F: FnMut(&mut T)>(&mut self, mut func: F) {
         self.data.iter_mut().for_each(|n| func(n));

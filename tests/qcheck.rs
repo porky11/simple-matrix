@@ -92,7 +92,7 @@ quickcheck! {
         // In-bounds
         for r in 0..a.rows() {
             for c in 0..a.cols() {
-                if !a.set(r, c, v) || a.get(r, c) != Some(&v) {
+                if !a.set(r, c, v) || a.get(r, c) != Some(v) {
                     return false;
                 }
             }

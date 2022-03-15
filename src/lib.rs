@@ -50,7 +50,7 @@ sub -= zero;
 
 
 // Get cells
-let val: &u32 = add.get(0, 3).unwrap();
+let val: u32 = add.get(0, 3).unwrap();
 
 // Set cells
 add.set(0, 3, 0);

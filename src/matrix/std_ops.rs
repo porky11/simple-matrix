@@ -1,10 +1,5 @@
 use super::Matrix;
-use std::ops::Add;
-use std::ops::AddAssign;
-use std::ops::Mul;
-use std::ops::Neg;
-use std::ops::Sub;
-use std::ops::SubAssign;
+use std::ops::{Add, AddAssign, Mul, Neg, Sub, SubAssign};
 
 macro_rules! impl_op {
     ($trait:ident, $func:ident, $op:tt) => {

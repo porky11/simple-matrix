@@ -5,7 +5,7 @@ use std::ops::Mul;
 use std::ops::Sub;
 use std::ops::SubAssign;
 
-macro_rules! impl_op_basic {
+macro_rules! impl_op {
     ($trait:ident, $func:ident, $op:tt) => {
         impl<T: $trait<Output = T>> $trait for Matrix<T> {
             type Output = Matrix<T>;
@@ -50,7 +50,7 @@ macro_rules! impl_op_basic {
     }
 }
 
-macro_rules! impl_op_assign_basic {
+macro_rules! impl_op_assign {
     ($trait:ident, $func:ident, $op:tt) => {
         impl<T: $trait> $trait for Matrix<T> {
             fn $func(&mut self, rhs: Self) {
@@ -76,21 +76,12 @@ macro_rules! impl_op_assign_basic {
     }
 }
 
-macro_rules! impl_op {
-    ($trait:ident, $($more:ident),*) => {
-        impl_op!($trait);
-        impl_op!($($more),*);
-    };
-
-    (Add) => { impl_op_basic!(Add, add, +); };
-    (Sub) => { impl_op_basic!(Sub, sub, -); };
-    (AddAssign) => { impl_op_assign_basic!(AddAssign, add_assign, +=); };
-    (SubAssign) => { impl_op_assign_basic!(SubAssign, sub_assign, -=); };
-}
-
 // Macro-ed impl
 
-impl_op!(Add, AddAssign, Sub, SubAssign);
+impl_op!(Add, add, +);
+impl_op!(Sub, sub, -);
+impl_op_assign!(AddAssign, add_assign, +=);
+impl_op_assign!(SubAssign, sub_assign, -=);
 
 // Mul implementation
 

@@ -22,6 +22,8 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
+    /// use simple_matrix::Matrix;
+    ///
     /// let mut mat: Matrix<i32> = Matrix::new(3, 6);
     /// ```
     pub fn new(rows: usize, cols: usize) -> Matrix<T>
@@ -42,11 +44,13 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
-    /// assert_eq!(mat.get(0, 1).unwrap(), 1);
-    /// assert_eq!(mat.get(1, 0).unwrap(), 6);
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
+    ///
+    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get(0, 1).unwrap(), &1);
+    /// assert_eq!(mat.get(1, 0).unwrap(), &6);
     /// ```
     pub fn from_iter(rows: usize, cols: usize, data: impl IntoIterator<Item = T>) -> Matrix<T> {
         assert!(rows > 0 && cols > 0);
@@ -66,7 +70,9 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
     /// assert_eq!(mat.rows(), 3);
     /// ```
@@ -78,7 +84,9 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
     /// assert_eq!(mat.cols(), 6);
     /// ```
@@ -91,12 +99,14 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
-    /// assert_eq!(mat.get(2, 5).unwrap(), 17);
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
-    /// assert!(mat.get(10, 2).is_err());
+    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get(2, 5).unwrap(), &17);
+    ///
+    /// assert!(mat.get(10, 2).is_none());
     /// ```
     pub fn get(&self, row: usize, col: usize) -> Option<&T> {
         if row < self.rows && col < self.cols {
@@ -111,13 +121,15 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mut mat: Matrix<usize> = Matrix::new(3, 6, 0..);
-    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
+    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
     ///
     /// let cell = mat.get_mut(0, 0).unwrap();
     /// *cell = 5;
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), 5);
+    /// assert_eq!(mat.get(0, 0).unwrap(), &5);
     /// ```
     pub fn get_mut(&mut self, row: usize, col: usize) -> Option<&mut T> {
         if row < self.rows && col < self.cols {
@@ -133,11 +145,13 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mut mat: Matrix<usize> = Matrix::new(3, 6, 0..);
-    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
+    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
     ///
     /// mat.set(0, 0, 5);
-    /// assert_eq!(mat.get(0, 0).unwrap(), 5);
+    /// assert_eq!(mat.get(0, 0).unwrap(), &5);
     /// ```
     pub fn set(&mut self, row: usize, col: usize, value: T) -> bool {
         if let Some(cell) = self.get_mut(row, col) {
@@ -153,11 +167,13 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
     ///
-    /// assert_eq!(mat.get_row(1).unwrap(), vec![6, 7, 8, 9, 10, 11]);
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
-    /// assert!(mat.get_row(5).is_err());
+    /// assert_eq!(mat.get_row(1).unwrap().cloned().collect::<Vec<usize>>(), vec![6, 7, 8, 9, 10, 11]);
+    ///
+    /// assert!(mat.get_row(5).is_none());
     /// ```
     pub fn get_row(&self, row: usize) -> Option<impl Iterator<Item = &T>> {
         if row < self.rows {
@@ -172,11 +188,13 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
     ///
-    /// assert_eq!(mat.get_col(1).unwrap(), vec![1, 7, 13]);
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     ///
-    /// assert!(mat.get_col(10).is_err());
+    /// assert_eq!(mat.get_col(1).unwrap().cloned().collect::<Vec<usize>>(), vec![1, 7, 13]);
+    ///
+    /// assert!(mat.get_col(10).is_none());
     /// ```
     pub fn get_col(&self, col: usize) -> Option<impl Iterator<Item = &T>> {
         if col < self.cols {
@@ -190,7 +208,9 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     /// let mat_t = mat.transpose();
     ///
     /// assert_eq!(mat.rows(), mat_t.cols());
@@ -224,8 +244,10 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
+    /// use simple_matrix::Matrix;
+    ///
     /// // Get the sum of all cells
-    /// let mat: Matrix<usize> = Matrix::new(3, 6, 0..);
+    /// let mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
     /// let mut sum = 0;
     /// mat.apply(|n| sum += *n);
     ///
@@ -241,13 +263,15 @@ impl<T> Matrix<T> {
     ///
     /// # Examples
     /// ```
-    /// // Modify all cells with a function
-    /// let mut mat: Matrix<usize> = Matrix::new(3, 6, 0..);
-    /// mat.apply_mut(|n| n *= 2);
+    /// use simple_matrix::Matrix;
     ///
-    /// assert_eq!(mat.get(0, 0).unwrap(), 0);
-    /// assert_eq!(mat.get(0, 1).unwrap(), 2);
-    /// assert_eq!(mat.get(0, 2).unwrap(), 4);
+    /// // Modify all cells with a function
+    /// let mut mat: Matrix<usize> = Matrix::from_iter(3, 6, 0..);
+    /// mat.apply_mut(|n| *n *= 2);
+    ///
+    /// assert_eq!(mat.get(0, 0).unwrap(), &0);
+    /// assert_eq!(mat.get(0, 1).unwrap(), &2);
+    /// assert_eq!(mat.get(0, 2).unwrap(), &4);
     /// ```
     pub fn apply_mut<F: FnMut(&mut T)>(&mut self, mut func: F) {
         self.data.iter_mut().for_each(|n| func(n));

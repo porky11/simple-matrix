@@ -21,13 +21,15 @@ Then, you can use it in your project:
 ```
 use simple_matrix::Matrix;
 
-let mat: Matrix<i32> = Matrix::new();
+let mat: Matrix<i32> = Matrix::new(2, 3);
 ```
 
 # Example: Basic matrix usage
 ```
+use simple_matrix::Matrix;
+
 // Create a matrix of default cells
-let zero: Matrix<u32> = Matrix::new(3, 3);
+let zero: Matrix<u32> = Matrix::new(2, 4);
 
 // Create a 2x4 matrix from an iterator (fill it row by row)
 let mat1: Matrix<u32> = Matrix::from_iter(2, 4, 0..);
@@ -61,7 +63,9 @@ for val in add {
 
 # Example: Dot product
 ```
-let mat: Matrix<f64> = Matrix::from_iter(2, 4, 0..);
+use simple_matrix::Matrix;
+
+let mat: Matrix<f64> = Matrix::new(2, 4);
 
 // Construct the transposed matrix
 let mat_t = mat.transpose();
@@ -86,7 +90,9 @@ Current available features are listed below with a little description:
 ## impl_from
 Implements the *From* Trait for basic numeric types.
 
-```
+```ignore
+use simple_matrix::Matrix;
+
 let m1: Matrix<i8> = Matrix::new(3, 5);
 let m2: Matrix<i64> = m1.into();
 ```

@@ -12,9 +12,6 @@ description = "A simple generic matrix library"
 categories = ["data-structures"]
 keywords = ["simple", "matrix", "matrices"]
 
-[lib]
-doctest = false
-
 [features]
 impl_from = []
 

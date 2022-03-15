@@ -61,14 +61,6 @@ fn neg(m: Matrix<i32>) -> Matrix<i32> {
     zero - m
 }
 
-fn identity(length: usize) -> Matrix<i32> {
-    let mut m = Matrix::zero(length, length);
-    for i in 0..length {
-        m.set(i, i, 1);
-    }
-    m
-}
-
 quickcheck! {
     fn qcheck_get(t: AMatrix<i32>) -> bool {
         let a = t.0;
@@ -301,8 +293,8 @@ quickcheck! {
         let zero = |r, c| Matrix::zero(r, c);
 
         let a = &t.0;
-        let ident1 = &identity(a.cols());
-        let ident2 = &identity(a.rows());
+        let ident1 = &Matrix::identity(a.cols());
+        let ident2: &Matrix<i32> = &Matrix::identity(a.rows());
 
         (a * &zero(a.cols(), 2) == zero(a.rows(), 2)) && (&(a * ident1) == a) && (&(ident2 * a) == a)
     }

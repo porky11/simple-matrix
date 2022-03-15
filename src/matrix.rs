@@ -16,7 +16,7 @@ pub struct Matrix<T> {
 }
 
 impl<T> Matrix<T> {
-    /// Constructs a new, non-empty Matrix<T> where cells are set to zero.  
+    /// Constructs a new Matrix<T> where cells are set to zero.
     /// Use `Matrix::from_iter` if you want to set the matrix from an iterator.
     ///
     /// # Panics
@@ -26,9 +26,9 @@ impl<T> Matrix<T> {
     /// ```
     /// use simple_matrix::Matrix;
     ///
-    /// let mut mat: Matrix<i32> = Matrix::new(3, 6);
+    /// let mut mat: Matrix<i32> = Matrix::zero(3, 6);
     /// ```
-    pub fn new(rows: usize, cols: usize) -> Matrix<T>
+    pub fn zero(rows: usize, cols: usize) -> Matrix<T>
     where
         T: Zero,
     {
@@ -38,7 +38,7 @@ impl<T> Matrix<T> {
     /// Constructs a new identity Matrix<T> of a specified size.
     ///
     /// # Panics
-    /// Panics if `size` is equal to `0`.  
+    /// Panics if `size` is equal to `0`
     ///
     /// # Examples
     /// ```
@@ -55,7 +55,7 @@ impl<T> Matrix<T> {
     where
         T: Zero + One,
     {
-        let mut result = Self::new(size, size);
+        let mut result = Self::zero(size, size);
         for i in 0..size {
             result.set(i, i, T::one());
         }

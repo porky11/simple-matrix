@@ -57,12 +57,12 @@ impl Arbitrary for A3Matrix<i32> {
 }
 
 fn neg(m: Matrix<i32>) -> Matrix<i32> {
-    let zero = Matrix::new(m.rows(), m.cols());
+    let zero = Matrix::zero(m.rows(), m.cols());
     zero - m
 }
 
 fn identity(length: usize) -> Matrix<i32> {
-    let mut m = Matrix::new(length, length);
+    let mut m = Matrix::zero(length, length);
     for i in 0..length {
         m.set(i, i, 1);
     }
@@ -284,7 +284,7 @@ quickcheck! {
         let a = &t.0;
         let b = &t.1;
         let c = &t.2;
-        let zero = &Matrix::new(a.rows(), a.cols());
+        let zero = &Matrix::zero(a.rows(), a.cols());
 
         (a + b == b + a)
         && (a + &(b + c) == &(a + b) + c)
@@ -294,7 +294,7 @@ quickcheck! {
     fn qcheck_sub(t: A2Matrix<i32>) -> bool {
         let a = &t.0;
         let b = &t.1;
-        let zero = &Matrix::new(a.rows(), a.cols());
+        let zero = &Matrix::zero(a.rows(), a.cols());
 
         (a - b == neg(b - a))
         && (&(a - a) == zero)
@@ -302,7 +302,7 @@ quickcheck! {
     }
 
     fn qcheck_mul(t: AMatrix<i32>) -> bool {
-        let zero = |r,c| Matrix::new(r, c);
+        let zero = |r,c| Matrix::zero(r, c);
 
         let a = &t.0;
         let ident1 = &identity(a.cols());

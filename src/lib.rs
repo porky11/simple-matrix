@@ -21,7 +21,7 @@ Then, you can use it in your project:
 ```
 use simple_matrix::Matrix;
 
-let mat: Matrix<i32> = Matrix::new(2, 3);
+let mat: Matrix<i32> = Matrix::zero(2, 3);
 ```
 
 # Example: Basic matrix usage
@@ -29,7 +29,7 @@ let mat: Matrix<i32> = Matrix::new(2, 3);
 use simple_matrix::Matrix;
 
 // Create a matrix of default cells
-let zero: Matrix<u32> = Matrix::new(2, 4);
+let zero: Matrix<u32> = Matrix::zero(2, 4);
 
 // Create a 2x4 matrix from an iterator (fill it row by row)
 let mat1: Matrix<u32> = Matrix::from_iter(2, 4, 0..);
@@ -65,7 +65,7 @@ for val in add {
 ```
 use simple_matrix::Matrix;
 
-let mat: Matrix<f64> = Matrix::new(2, 4);
+let mat: Matrix<f64> = Matrix::zero(2, 4);
 
 // Construct the transposed matrix
 let mat_t = mat.transpose();
@@ -93,7 +93,7 @@ Implements the *From* Trait for basic numeric types.
 ```ignore
 use simple_matrix::Matrix;
 
-let m1: Matrix<i8> = Matrix::new(3, 5);
+let m1: Matrix<i8> = Matrix::zero(3, 5);
 let m2: Matrix<i64> = m1.into();
 ```
 */

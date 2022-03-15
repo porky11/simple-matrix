@@ -3,7 +3,7 @@ mod from;
 mod iter;
 mod std_ops;
 
-use num_traits::Zero;
+use num_traits::{One, Zero};
 
 use std::ops::{Deref, Index, IndexMut};
 
@@ -33,6 +33,33 @@ impl<T> Matrix<T> {
         T: Zero,
     {
         Matrix::from_iter(rows, cols, (0..).map(|_| T::zero()))
+    }
+
+    /// Constructs a new identity Matrix<T> of a specified size.
+    ///
+    /// # Panics
+    /// Panics if `size` is equal to `0`.  
+    ///
+    /// # Examples
+    /// ```
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<usize> = Matrix::identity(3);
+    ///
+    /// assert_eq!(mat.get(0, 0).unwrap(), &1);
+    /// assert_eq!(mat.get(0, 1).unwrap(), &0);
+    /// assert_eq!(mat.get(2, 1).unwrap(), &0);
+    /// assert_eq!(mat.get(2, 2).unwrap(), &1);
+    /// ```
+    pub fn identity(size: usize) -> Matrix<T>
+    where
+        T: Zero + One,
+    {
+        let mut result = Self::new(size, size);
+        for i in 0..size {
+            result.set(i, i, T::one());
+        }
+        result
     }
 
     /// Constructs a new, non-empty Matrix<T> where cells are set from an iterator.  

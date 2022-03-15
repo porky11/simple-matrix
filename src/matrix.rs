@@ -5,7 +5,7 @@ mod std_ops;
 
 use std::ops::{Deref, Index, IndexMut};
 
-/// A 2-Dimensional, non-resisable container.
+/// A 2-Dimensional, non-resizable container.
 #[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd)]
 pub struct Matrix<T> {
     rows: usize,

@@ -96,7 +96,7 @@ impl_op!(Add, AddAssign, Sub, SubAssign);
 
 impl<T> Mul<Matrix<T>> for Matrix<T>
 where
-    T: Mul<Output = T> + AddAssign + Copy,
+    T: Mul<Output = T> + Add<Output = T> + Copy,
 {
     type Output = Matrix<T>;
 
@@ -119,7 +119,7 @@ where
                         let mut acc = *a * *b;
 
                         for (a, b) in iter {
-                            acc += *a * *b;
+                            acc = acc + *a * *b;
                         }
 
                         data.push(acc);
@@ -132,7 +132,7 @@ where
     }
 }
 
-impl<'a, 'b, T: AddAssign> Mul<&'b Matrix<T>> for &'a Matrix<T>
+impl<'a, 'b, T: Add<Output = T>> Mul<&'b Matrix<T>> for &'a Matrix<T>
 where
     &'a T: Mul<&'b T, Output = T>,
 {
@@ -157,7 +157,7 @@ where
                         let mut acc = a * b;
 
                         for (a, b) in iter {
-                            acc += a * b;
+                            acc = acc + a * b;
                         }
 
                         data.push(acc);

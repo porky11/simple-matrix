@@ -7,7 +7,7 @@ This crate should not be considered mature enough for *professional use*, check 
 
 If you are still interested, feel free to continue!
 
-# Usage 
+# Usage
 Link it in your project's `Cargo.toml` file:
 ```text
 # Example Cargo.toml

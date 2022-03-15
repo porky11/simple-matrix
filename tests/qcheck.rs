@@ -286,9 +286,7 @@ quickcheck! {
         let c = &t.2;
         let zero = &Matrix::zero(a.rows(), a.cols());
 
-        (a + b == b + a)
-        && (a + &(b + c) == &(a + b) + c)
-        && (&(a + zero) == a)
+        (a + b == b + a) && (a + &(b + c) == &(a + b) + c) && (&(a + zero) == a)
     }
 
     fn qcheck_sub(t: A2Matrix<i32>) -> bool {
@@ -296,20 +294,16 @@ quickcheck! {
         let b = &t.1;
         let zero = &Matrix::zero(a.rows(), a.cols());
 
-        (a - b == neg(b - a))
-        && (&(a - a) == zero)
-        && (&(a - zero) == a)
+        (a - b == neg(b - a)) && (&(a - a) == zero) && (&(a - zero) == a)
     }
 
     fn qcheck_mul(t: AMatrix<i32>) -> bool {
-        let zero = |r,c| Matrix::zero(r, c);
+        let zero = |r, c| Matrix::zero(r, c);
 
         let a = &t.0;
         let ident1 = &identity(a.cols());
         let ident2 = &identity(a.rows());
 
-        (a * &zero(a.cols(), 2) == zero(a.rows(), 2))
-        && (&(a * ident1) == a)
-        && (&(ident2 * a) == a)
+        (a * &zero(a.cols(), 2) == zero(a.rows(), 2)) && (&(a * ident1) == a) && (&(ident2 * a) == a)
     }
 }

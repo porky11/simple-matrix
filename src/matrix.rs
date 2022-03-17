@@ -5,7 +5,7 @@ mod std_ops;
 
 use num_traits::{One, Zero};
 
-use std::ops::{Deref, Index, IndexMut};
+use std::ops::{Deref, Div, Index, IndexMut, Mul, Sub};
 
 /// A 2-Dimensional, non-resizable container.
 #[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd)]
@@ -276,6 +276,22 @@ impl<T> Matrix<T> {
         }
     }
 
+    /// Swaps row at the specified indices.
+    pub fn swap_rows(&mut self, row1: usize, row2: usize) {
+        for col in 0..self.cols {
+            self.data
+                .swap(col + row1 * self.cols, col + row2 * self.cols);
+        }
+    }
+
+    /// Swaps columns at the specified indices.
+    pub fn swap_cols(&mut self, col1: usize, col2: usize) {
+        for row in 0..self.rows {
+            self.data
+                .swap(col1 + row * self.cols, col2 + row * self.cols);
+        }
+    }
+
     /// Take a *M*x*N* Matrix and construct the transposed *N*x*M* Matrix.
     ///
     /// # Examples
@@ -308,6 +324,98 @@ impl<T> Matrix<T> {
                 data
             },
         }
+    }
+
+    /// Take a *N*x*N* Matrix and construct the inverse of it.
+    ///
+    /// # Examples
+    /// ```
+    /// use simple_matrix::Matrix;
+    ///
+    /// let mat: Matrix<f32> = Matrix::new([
+    ///     [1.0, 0.0, 2.0, 0.0],
+    ///     [0.0, 3.0, 0.0, 4.0],
+    ///     [5.0, 0.0, 6.0, 0.0],
+    ///     [0.0, 7.0, 0.0, 8.0],
+    /// ]);
+    /// let inverse = mat.inverse().unwrap();
+    ///
+    /// for (value, expected) in inverse.into_iter().zip(Matrix::new([
+    ///     [-1.5, 0.0, 0.5, 0.0],
+    ///     [0.0, -2.0, 0.0, 1.0],
+    ///     [1.25, 0.0, -0.25, 0.0],
+    ///     [0.0, 1.75, 0.0, -0.75],
+    /// ])) {
+    ///     assert!((value - expected).abs() < 0.01);
+    /// }
+    /// ```
+    pub fn inverse(&self) -> Option<Matrix<T>>
+    where
+        T: Clone + Zero + One + Sub<Output = T> + Mul<Output = T> + Div<Output = T>,
+    {
+        if self.rows != self.cols {
+            return None;
+        }
+
+        let len = self.rows;
+        let mut matrix: Matrix<T> = Matrix::zero(len, len * 2);
+        for i in 0..len {
+            for j in 0..len {
+                matrix.set(i, j, self.get(i, j).unwrap());
+            }
+            matrix.set(i, i + len, T::one());
+        }
+
+        let mut lead = 0;
+
+        for r in 0..matrix.rows {
+            if matrix.cols <= lead {
+                break;
+            }
+            let mut i = r;
+            while matrix.get_ref(i, lead).unwrap().is_zero() {
+                i = i + 1;
+                if matrix.rows == i {
+                    i = r;
+                    lead = lead + 1;
+                    if matrix.cols == lead {
+                        break;
+                    }
+                }
+            }
+
+            matrix.swap_rows(i, r);
+
+            let div = matrix.get_ref(r, lead).unwrap();
+            if !div.is_zero() {
+                let div = div.clone();
+                for j in 0..matrix.cols {
+                    let value = matrix.get_mut(r, j).unwrap();
+                    *value = value.clone() / div.clone();
+                }
+            }
+
+            for k in 0..matrix.rows {
+                if k != r {
+                    let mul = matrix.get(k, lead).unwrap();
+                    for j in 0..matrix.cols {
+                        let subtracted = matrix.get(r, j).unwrap() * mul.clone();
+                        let value = matrix.get_mut(k, j).unwrap();
+                        *value = value.clone() - subtracted;
+                    }
+                }
+            }
+
+            lead += 1;
+        }
+
+        let mut result: Matrix<T> = Matrix::zero(len, len);
+        for i in 0..len {
+            for j in 0..len {
+                result.set(i, j, matrix.get(i, j + len).unwrap());
+            }
+        }
+        Some(result)
     }
 
     /// Apply a function to all cells of the matrix.  
